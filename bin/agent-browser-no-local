@@ -1,6 +1,0 @@
-#!/bin/sh
-# agent-browser-cli: this executable is intentionally unusable.
-# It is set as AGENT_BROWSER_EXECUTABLE_PATH so a local browser can never start.
-# Configure a reachable CDP endpoint in config/agent-browser.json instead.
-echo "agent-browser-cli: local browser launch is disabled; set a remote CDP endpoint in config/agent-browser.json" >&2
-exit 78
