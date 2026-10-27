@@ -9,31 +9,76 @@ description: 使用随包捆绑的 agent-browser Rust CLI 通过 CDP 操作浏�
 
 启动任务前**不要**检查环境变量、`PATH`、版本或插件状态；直接运行需要的命令。
 
-## 配置文件在插件中的位置
+## 如何修改 CDP 端点
+
+### 1. 找到配置文件
+
+配置文件在插件包内：
 
 ```text
 agent-browser-cli/
 └── config/
-    └── agent-browser.json      ← CDP 端点在这里
+    └── agent-browser.json      ← 修改这里的 cdp
 ```
 
-安装后需要修改配置时，用下面的命令定位（这一步只在改配置时做，不要作为启动前检查）：
+安装后执行下面的命令得到它的绝对路径（只在修改配置时执行）：
 
 ```bash
 echo "$AGENT_BROWSER_CONFIG"
 ```
 
-文件内容：
+### 2. 编辑 `cdp`
+
+用任意编辑器打开：
+
+```bash
+${EDITOR:-vi} "$AGENT_BROWSER_CONFIG"
+```
+
+只改 `cdp` 的值，保持 JSON 格式：
 
 ```json
 {
   "$schema": "https://agent-browser.dev/schema.json",
-  "cdp": "http://127.0.0.1:9222",
+  "cdp": "http://192.168.1.10:9222",
   "pinTab": true
 }
 ```
 
-把 `cdp` 改成实际可访问的 CDP 端点，支持 `9222`、`http://host:9222`、`ws://host:9222/devtools/browser/<id>`、`wss://service.example/cdp?token=...`。配置已固定，命令里不要再传 `--cdp`。
+常见写法：
+
+| 场景 | `cdp` 写法 |
+| --- | --- |
+| 本机默认端口 | `"http://127.0.0.1:9222"` 或 `"9222"` |
+| 其他主机 | `"http://192.168.1.10:9222"` |
+| 远程 WebSocket | `"ws://host:9222/devtools/browser/<id>"` |
+| 云浏览器 | `"wss://browser-service.example/cdp?token=..."` |
+
+### 3. 让新端点生效
+
+保存后，下一条 `agent-browser` 命令会读取新配置。如果 daemon 已经连着旧端点，先执行：
+
+```bash
+agent-browser close
+```
+
+或者用新的 `--session`。
+
+### 4. 验证
+
+直接运行：
+
+```bash
+agent-browser open about:blank
+```
+
+失败时再按下一节用 `curl` 验证，不要提前检查。
+
+### 修改时注意
+
+- `pi update` 会重新检出插件包，可能覆盖这里的修改；升级后重新设置。
+- 带 token 的 `wss://` 属于敏感信息，不要提交或分享。
+- 不要在每条命令里用 `--cdp` 覆盖；配置文件是唯一入口。
 
 ## 正常使用
 

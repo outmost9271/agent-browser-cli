@@ -28,33 +28,74 @@ Try it for one invocation:
 pi -e ./agent-browser-cli
 ```
 
-## Config file location
+## How to change the CDP endpoint
+
+### 1. Locate the config
 
 The config lives inside the package:
 
 ```text
 agent-browser-cli/
 └── config/
-    └── agent-browser.json
+    └── agent-browser.json      # edit cdp here
 ```
 
-After installation, locate it when you need to edit it:
+After installation, print its absolute path:
 
 ```bash
 echo "$AGENT_BROWSER_CONFIG"
 ```
 
-Edit `cdp` in that file:
+### 2. Edit `cdp`
+
+Open it with any editor:
+
+```bash
+${EDITOR:-vi} "$AGENT_BROWSER_CONFIG"
+```
+
+Change only the `cdp` value and keep valid JSON:
 
 ```json
 {
   "$schema": "https://agent-browser.dev/schema.json",
-  "cdp": "http://127.0.0.1:9222",
+  "cdp": "http://192.168.1.10:9222",
   "pinTab": true
 }
 ```
 
-Accepted forms: `9222`, `http://host:9222`, `ws://host:9222/devtools/browser/<id>`, `wss://service.example/cdp?token=...`.
+Accepted forms:
+
+| Target | `cdp` value |
+| --- | --- |
+| Local default port | `"http://127.0.0.1:9222"` or `"9222"` |
+| Another host | `"http://192.168.1.10:9222"` |
+| Remote WebSocket | `"ws://host:9222/devtools/browser/<id>"` |
+| Cloud browser | `"wss://browser-service.example/cdp?token=..."` |
+
+### 3. Apply it
+
+The next `agent-browser` command reads the new value. If the daemon is still attached to the old endpoint:
+
+```bash
+agent-browser close
+```
+
+Or use a new `--session`.
+
+### 4. Verify
+
+```bash
+agent-browser open about:blank
+```
+
+Only if that fails, use the `curl` check in the next section.
+
+### Notes
+
+- `pi update` re-checks out the package and may overwrite this edit; set it again after upgrading.
+- A `wss://` URL with a token is sensitive; do not commit or share it.
+- Do not override it with `--cdp` on every command; the config file is the single entry point.
 
 ## When a command fails
 
