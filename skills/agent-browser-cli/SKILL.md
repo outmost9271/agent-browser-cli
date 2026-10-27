@@ -40,8 +40,7 @@ ${EDITOR:-vi} "$AGENT_BROWSER_CONFIG"
 ```json
 {
   "$schema": "https://agent-browser.dev/schema.json",
-  "cdp": "http://192.168.1.10:9222",
-  "pinTab": true
+  "cdp": "http://192.168.1.10:9222"
 }
 ```
 
@@ -92,7 +91,7 @@ agent-browser screenshot --if-changed
 agent-browser close
 ```
 
-多 agent 共享同一浏览器时，用独立 `--session`；本包默认 `pinTab: true`。
+多 agent 共享同一浏览器时，用独立 `--session`。
 
 ## 仅在 agent-browser 失败后验证端点
 

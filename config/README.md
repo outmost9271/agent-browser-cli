@@ -25,8 +25,7 @@ Example:
 ```json
 {
   "$schema": "https://agent-browser.dev/schema.json",
-  "cdp": "http://192.168.1.10:9222",
-  "pinTab": true
+  "cdp": "http://192.168.1.10:9222"
 }
 ```
 
