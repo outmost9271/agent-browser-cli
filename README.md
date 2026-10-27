@@ -2,6 +2,12 @@
 
 Pi package that puts the **agent-browser** Rust CLI on the `bash` tool `PATH`, forces a single bundled config file, and bundles the complete upstream skills.
 
+Call it directly — no absolute path and no preflight checks:
+
+```bash
+agent-browser open https://example.com
+```
+
 ## What is bundled
 
 - `bin/agent-browser` — upstream prebuilt binary, v0.39.4, Linux x86_64 (glibc)
@@ -22,9 +28,17 @@ Try it for one invocation:
 pi -e ./agent-browser-cli
 ```
 
-## Configure the CDP endpoint
+## Config file location
 
-Inside a Pi session:
+The config lives inside the package:
+
+```text
+agent-browser-cli/
+└── config/
+    └── agent-browser.json
+```
+
+After installation, locate it when you need to edit it:
 
 ```bash
 echo "$AGENT_BROWSER_CONFIG"
@@ -42,7 +56,16 @@ Edit `cdp` in that file:
 
 Accepted forms: `9222`, `http://host:9222`, `ws://host:9222/devtools/browser/<id>`, `wss://service.example/cdp?token=...`.
 
-The extension sets `AGENT_BROWSER_CONFIG` and `AGENT_BROWSER_SKILLS_DIR` at session start, so editing the file is all that is needed.
+## When a command fails
+
+Do not pre-check anything. Run `agent-browser` directly. If it fails, probe the configured endpoint with `curl`:
+
+```bash
+curl -sS --max-time 5 --noproxy '*' "http://host:port/json/version"
+```
+
+- No connection, no `webSocketDebuggerUrl` → the CDP endpoint is not available. Stop and report the endpoint and error to the user.
+- `webSocketDebuggerUrl` present → the endpoint is up; keep debugging the CLI error.
 
 ## Full upstream skills
 
@@ -61,7 +84,7 @@ agent-browser-cli/
 ├── package.json
 ├── extensions/agent-browser-cli.ts
 ├── bin/agent-browser
-├── config/agent-browser.json
+├── config/agent-browser.json      # CDP endpoint lives here
 ├── skills/agent-browser-cli/SKILL.md
 ├── agent-browser-skills/
 ├── LICENSE

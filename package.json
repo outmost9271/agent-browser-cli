@@ -1,6 +1,6 @@
 {
   "name": "agent-browser-cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Pi package bundling the agent-browser Rust CLI on PATH with a CDP config and the complete upstream skills.",
   "type": "module",
   "keywords": [
