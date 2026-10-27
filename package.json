@@ -1,0 +1,44 @@
+{
+  "name": "agent-browser-cli",
+  "version": "1.0.0",
+  "description": "Pi package bundling the agent-browser Rust CLI on PATH with a CDP-only config and the complete upstream skills.",
+  "type": "module",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "agent-browser",
+    "cdp",
+    "browser-automation"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/outmost9271/agent-browser-cli.git"
+  },
+  "homepage": "https://github.com/outmost9271/agent-browser-cli#readme",
+  "bugs": {
+    "url": "https://github.com/outmost9271/agent-browser-cli/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/agent-browser-cli.ts"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  },
+  "files": [
+    "agent-browser-skills",
+    "bin",
+    "config",
+    "extensions",
+    "scripts",
+    "skills",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ]
+}

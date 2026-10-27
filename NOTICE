@@ -1,0 +1,13 @@
+agent-browser-cli
+Copyright 2026 agent-browser-cli contributors
+
+This package bundles, unmodified:
+
+  agent-browser v0.39.4 (bin/agent-browser)
+  agent-browser skills (agent-browser-skills/)
+
+from https://github.com/vercel-labs/agent-browser
+Copyright Vercel Labs
+Licensed under the Apache License, Version 2.0.
+
+The full Apache License, Version 2.0 text is included in LICENSE.
